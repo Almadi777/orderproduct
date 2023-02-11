@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Order;
-use App\Models\Product;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 
@@ -18,15 +16,13 @@ class OrdersTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-
         for ($i = 0; $i < 1000; $i++) {
             Order::create([
-                'order_date' => $faker->date(),
-                'phone' => $faker->phoneNumber(),
+                'order_date' => date('Y-m-d', strtotime('07/07/2020')),
+                'phone' => "+7 " . $faker->numerify("### ### ## ##"),
                 'email' => $faker->email(),
-                'order_amount' => $faker->numberBetween(3000, 5000),
+                'order_amount' => $faker->numberBetween(3000, 5000)
             ]);
         }
     }
 }
-
