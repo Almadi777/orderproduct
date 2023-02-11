@@ -3,48 +3,48 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Services\ProductService;
+use Illuminate\Foundation\Http\FormRequest;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
+        $productService = new ProductService();
+        $products = $productService->index();
+
         return view('products.index', compact('products'));
     }
 
-    public function store(Request $request)
+    public function store(FormRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|min:3',
-            'price' => 'required|numeric|min:0'
-        ]);
-
-        Product::create($request->all());
+        $productService = new ProductService();
+        $product = $productService->store($request);
 
         return redirect()->route('products.index');
     }
 
     public function show(Product $product)
     {
+        $productService = new ProductService();
+        $product = $productService->show($product);
+
         return view('products.show', compact('product'));
     }
 
-    public function update(Request $request, Product $product)
+    public function update(FormRequest $request, Product $product)
     {
-        $this->validate($request, [
-            'name' => 'required|min:3',
-            'price' => 'required|numeric|min:0'
-        ]);
-
-        $product->update($request->all());
+        $productService = new ProductService();
+        $product = $productService->update($request, $product);
 
         return redirect()->route('products.index');
     }
 
     public function destroy(Product $product)
     {
-        $product->delete();
+        $productService = new ProductService();
+        $productService->destroy($product);
+
         return redirect()->route('products.index');
     }
 }
